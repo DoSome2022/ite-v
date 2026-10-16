@@ -3,329 +3,325 @@ import { useState } from 'react';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link'
 import Image from 'next/image'
-import Nav from '../components/Nav';
-import Footer from '../components/Footer';
-import GoogleMap from '../components/GoogleMap';
+import Nav from '@/components/Nav';
+import Footer from '@/components/Footer';
+import MatrixGridHeroBg from '@/components/MatrixGridHeroBg';
 
-// 合作機構數據
-// const partners = [
-//   { id: 1, name: "AIA", logo: "/partners/AIA.jpeg" },
-//   { id: 2, name: "BNI", logo: "/partners/BNI.jpeg" },
-//   { id: 3, name: "CT", logo: "/partners/CT.jpeg" },
-//   { id: 4, name: "HKCYS", logo: "/partners/HKCYS.jpeg" },
-//   { id: 5, name: "HKJC", logo: "/partners/HKJC.jpeg" },
-// ];
-
-// 教師團隊數據（已加入中文職稱）
+// 教師團隊數據｜中英雙語簡介（保留名字，移除頭像avatar相關渲染，數據保留備用）
 const teamMembers = [
   {
     id: 1,
-    name: "Mr. Aaron Lung",
+    name: "Mr. Aaron Wai",
     avatar: "/Teacher_WaiLung.webp",
-    title: "跨領域科技與管理講師", // 新增中文職稱
-    bio: "With a multidisciplinary background that bridges tech, finance, sales, and leadership, he brings hands-on corporate experience from building systems, managing teams, and scaling businesses in Asia, all while focusing on practical teaching approaches that emphasize job-ready skills in web development, automation, and data analysis."
+    title: "跨領域科技與管理講師",
+    bio: "With a multidisciplinary background that bridges tech, finance, sales, and leadership, he brings hands-on corporate experience from building systems, managing teams, and scaling businesses in Asia, all while focusing on practical teaching approaches that emphasize job-ready skills in web development, automation, and data analysis.",
+    bioZH: "具備科技、金融、銷售與管理跨領域經驗，曾於亞洲負責系統開發、團隊管理與業務擴展，專注實務教學，教授網頁開發、自動化與數據分析等可直接應用於職場的技能。"
   },
   {
     id: 2,
     name: "Mr. Honcy Lee",
     avatar: "/Teacher_HoncyLee.webp",
-    title: "金融科技與數據分析創辦人", // 新增中文職稱
-    bio: "The Founder and Director of an IT and financial data analytics company, a former Managing Director at a private tech company, and over 10 years of experience in multinational financial institutions. 10+ Years in Finance & Tech, Now Training the Next Generation of Analysts."
+    title: "金融科技與數據分析創辦人",
+    bio: "The Founder and Director of an IT and financial data analytics company, a former Managing Director at a private tech company, and over 10 years of experience in multinational financial institutions. 10+ Years in Finance & Tech, Now Training the Next Generation of Analysts.",
+    bioZH: "資訊科技及金融數據分析公司創辦人，曾任私人科技公司董事總經理，於跨國金融機構擁有超過10年經驗，專門培育新一代數據分析人才。"
   },
   {
     id: 3,
     name: "Mr. Eric",
     avatar: "/Teacher_Eric.png",
-    title: "ERP轉型與中小企成長導師", // 新增中文職稱
-    bio: "ERP Transformation Mentor with over 15 years of experience in defining industry pain points and driving strategic solutions. As a SME Growth Turbocharger, Eric excels at identifying and capitalizing on opportunities for small and medium enterprises, helping them scale and thrive in a competitive landscape."
+    title: "ERP轉型與中小企成長導師",
+    bio: "ERP Transformation Mentor with over 15 years of experience in defining industry pain points and driving strategic solutions. As a SME Growth Turbocharger, Eric excels at identifying and capitalizing on opportunities for small and medium enterprises, helping them scale and thrive in a competitive landscape.",
+    bioZH: "ERP轉型導師，擁有15年以上行業經驗，擅長拆解中小企業痛點，制定企業數碼轉型方案，協助中小企把握商機、擴展業務。"
   },
 ];
 
-
 export default function ITEEducationCenter() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
   return (
     <div className="min-h-screen bg-white text-gray-800">
-      {/* 導航欄 */}
-      <Nav/>
-
-      {/* 首頁 Banner 區 */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <div>
-            <h2 className="text-2xl font-light text-gray-400 mb-2">INNOVATION TREND EDUCATION</h2>
-            <h3 className="text-2xl font-semibold text-cyan-700 mb-4">InnoTrendEDU 企業科技轉型的起點</h3>
-            <p className="text-gray-600 mb-6 font-bold">
-              專注於把科技能力「真正落地」到企業日常營運之中。我們多年來應對過不同行業的培訓與轉型需要，熟悉各類團隊常見痛點：流程靠人手、資料分散、報表慢又唔準、跨部門協作斷層、資訊安全靠「小心啲」但無方法論。
+      <Nav />
+      {/* ========== Hero 全幅背景 Banner ========== */}
+      <section className="relative min-h-[70vh] flex items-center overflow-hidden">
+        {/* Matrix 數字海波浪背景 (Client Component) */}
+        <div className="absolute inset-0 z-0">
+          <MatrixGridHeroBg />
+          {/* 半透明白色遮罩，方便文字閱讀 */}
+          <div className="absolute inset-0 bg-white/70"></div>
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="max-w-xl bg-white/90 p-8 rounded-xl shadow-md">
+            <h1 className="text-3xl font-semibold text-cyan-700 mb-4">
+              InnoTrendEDU｜宏業教育中心
+            </h1>
+            <p className="text-xl font-light text-gray-600 mb-4">
+              中小企數碼轉型｜NITTP資助課程
             </p>
-            <p className="text-gray-600 mb-6 font-light">
-              教師隊伍平均擁有超過15年的實戰經驗，成員均為現職於各大政府認可院校的專業人士。此外，我們的講師也包括科技創業公司的創始人，他們不僅具備深厚的學術背景，還擁有豐富的企業服務案例，並熟悉行業的最新技術發展趨勢。教師們將分享一手的創業經驗與市場洞察，讓學員在學習過程中獲得寶貴的行業洞見。
+            <p className="text-gray-600 mb-8 font-light">
+              我們提供企業團體培訓與個人公開進修，協助企業建立可複製的工作方式，也幫助在職人士提升AI、數據分析及網絡安全能力。
             </p>
-            <p className="text-gray-600 mb-6 font-light">
-              因此，我們的角色不止是授課——而是以行業理解＋可執行方案，協助企業建立可複製的工作方式，甚至支援跨企業/跨部門的指導與能力對齊，從效率、風險控制到人才成長，全面提升競爭力。
-            </p>
+            <div className="flex flex-wrap gap-4">
+              <Link href="/corporate">
+                <button className="px-5 py-2 bg-cyan-700 text-white rounded-3xl flex items-center gap-2 hover:bg-cyan-800 transition-colors">
+                  <span>企業培訓計劃</span>
+                  <ChevronRight size={16} />
+                </button>
+              </Link>
+              <Link href="/courses">
+                <button className="px-5 py-2 bg-slate-700 text-white rounded-3xl flex items-center gap-2 hover:bg-slate-800 transition-colors">
+                  <span>個人科技進修</span>
+                  <ChevronRight size={16} />
+                </button>
+              </Link>
+            </div>
           </div>
-          <div className="relative h-80 overflow-hidden rounded-lg">
-            <Image 
-              src="/banner.jpg" 
-              alt="ITE科技城市" 
-              width={1920}
-              height={1080}
-              className="w-full h-full object-cover"
+        </div>
+      </section>
+
+      {/* ========== 個人科技進修｜B2C 上移 ========== */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-2 border-slate-200 rounded-xl my-12 overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          {/* 左側背景圖卡片 */}
+          <div className="relative h-96 rounded-xl overflow-hidden order-1 md:order-none">
+            <Image
+              src="/core.jpg"
+              alt="香港個人AI課程 數據分析入門進修班 在職人士技能提升"
+              fill
+              sizes="(max-width:768px)100vw,50vw"
+              loading="lazy"
+              className="object-cover"
             />
-            {/* <div className="absolute inset-0 bg-linear-to-t from-white/90 to-transparent"></div> */}
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-blue-600/30"></div>
+            <div className="absolute inset-0 bg-slate-900/10"></div>
           </div>
-        </div>
-      </section>
-
-      {/* ITE核心: 創新與改變 */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h2 className="text-5xl font-light text-gray-500 mb-8">ITE核心: 創新與改變</h2>
-        <div className="flex justify-between gap-2 md:gap-5">
-          <div className="md:ml-20">
-            <div className="overflow-hidden">
-              <Image 
-                src="/b1.png" 
-                alt="科技圖示" 
-                width={200}
-                height={100}
-                className="w-full h-full object-cover"
-              />
+          <div>
+            <div className="border-l-4 border-slate-700 pl-4 mb-6">
+              <h2 className="text-4xl font-semibold text-gray-800">個人科技進修課程</h2>
+              <p className="text-gray-500 mt-2">公開小班｜在職人士進修｜可獲培訓證書</p>
             </div>
-            <div className="overflow-hidden">
-              <Image 
-                src="/b2.png" 
-                alt="科技建築" 
-                width={100}
-                height={100}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-          <div className="overflow-hidden">
-              <Image 
-                src="/b3.png" 
-                alt="科技建築" 
-                width={200}
-                height={100}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          <div className="flex items-center ml-5">
-            <p className="text-gray-600 font-light">
-              在科技驅動未來的時代，IT人才是社會發展的核心引擎。ITE教育中心自2019年成立以來，便肩負著一個清晰的使命：建立一個連接「教育」、「產業」與「科技」的堅實橋樑。我們不僅是傳授技能的培訓機構，更是孕育下一代科技領袖的創新搖籃。
+            <p className="text-gray-600 mb-4 font-light">
+              提供AI、數據分析入門、網絡安全入門公開班，小班實戰教學，適合在職人士提升職場技能。
             </p>
-            
+            <div className="flex flex-wrap gap-2 mb-6">
+              <span className="px-3 py-1 bg-slate-100 text-slate-800 rounded-full text-sm">AI課程</span>
+              <span className="px-3 py-1 bg-slate-100 text-slate-800 rounded-full text-sm">數據分析入門</span>
+              <span className="px-3 py-1 bg-slate-100 text-slate-800 rounded-full text-sm">網絡安全入門</span>
+              <span className="px-3 py-1 bg-slate-100 text-slate-800 rounded-full text-sm">公開小班</span>
+            </div>
+            <Link href="/courses">
+              <button className="px-5 py-2 bg-slate-700 text-white rounded-3xl flex items-center gap-2 hover:bg-slate-800 transition-colors">
+                <span>瀏覽個人課程及報名</span>
+                <ChevronRight size={16} />
+              </button>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* ITE優勢（why US？） */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h3 className="text-2xl font-semibold text-gray-700 mb-4">ITE優勢（why US？）</h3>
-        <p className="text-gray-600 mt-6 font-bold">
-          我們最重視「技術轉移」：循序漸進、由淺入深，一步一腳印做到出成果。
-        </p>
-        <p className="text-gray-600 mt-1 font-light">
-          每個主題都以 <span className="text-cyan-600 font-bold">Demo 演繹</span>帶路：講師先示範「點做」，再帶學員跟住做「做到出嚟」，最後轉化成學員可帶回公司即用的流程、模板或小工具，確保學完唔係得個知字，而係真係<span className="text-cyan-600 font-bold">做到、用到、交到</span>。
-        </p>
-        <p className="text-gray-600 mt-6 font-bold">
-          資助課程
-        </p>
-        <p className="text-gray-600 mt-1 font-light">
-          我們是「新型工業化及科技培訓計劃」 （NITTP）資格的培訓機構。該計劃可獲得企業就讀的課程費用<span className="text-cyan-600 font-bold">50%的資助額</span>。為保持課程的質量，每個課程必須經過嚴格的审核，迎合本地環境的需要，確保課程切實地達到最高標準。
-
-        </p>
-        <p className="text-gray-600 mt-1 font-light">
-          課程涵蓋：自動控制；銀行；生物醫學及醫護；數據通訊；數碼媒體；電子工程；環保；旅遊及飲食業；資訊科技；保險業相關科技；物流業相關科技；職業健康及安全；製造；印刷及出版；品質改善；可持續發展；紡織及製衣；批發/零售及出入口貿易；食品與健康科學等等。
-        </p>
-        {/* 查看所有課程 Button */}
-        <div className="mt-12">
-          <Link href='/'>
-          <button className="px-5 py-2 border-cyan-800  border-2 text-gray-800 rounded-3xl flex items-center gap-2 hover:bg-cyan-800 hover:text-white transition-colors">
-            <span>查看所有課程</span>
-            <ChevronRight size={16} />
-          </button>
-          </Link>
-        </div>
-        {/* 客製化 Button */}
-        <div className="mt-12">
-          <Link href='https://wa.me/51001888'>
-          <button className="px-5 py-2 border-cyan-800  border-2 text-gray-800 rounded-3xl flex items-center gap-2 hover:bg-cyan-800 hover:text-white transition-colors">
-            <span>索取企業客製化方案 / 報價</span>
-            <ChevronRight size={16} />
-          </button>
-          </Link>
-        </div>
-      </section>
-
-      {/* 核心課程體系區 */}
-      <section className="max-w-7xl mx-auto px-20 py-12 bg-gray-50 rounded-xl my-8">
-        <h2 className="text-5xl font-light text-gray-400 mb-2 text-center">Core Curriculum System</h2>
-        <h3 className="text-2xl font-semibold text-gray-700 mb-8 text-center">核心課程體系</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-  <div className="relative">
-    <div className="absolute -left-4 top-0 text-6xl font-bold text-gray-200">1</div>
-    <h4 className="text-xl font-medium text-gray-800 mb-4 ml-7">
-      CyberSecurity（網絡安全）
-    </h4>
-    <ul className="pl-5 text-gray-600 space-y-3 ml-2">
-      <li>
-        <span className="font-semibold text-gray-800">痛點：</span>
-        駭客無處不在，中招未必因公司規模大，多因「意識唔夠」同「習慣唔好」。
-      </li>
-      <li>
-        <span className="font-semibold text-gray-800">教學：</span>
-        從安全意識入手，涵蓋帳號、密碼、權限、釣魚、社工、裝置與雲端使用習慣，搭配生活化＋企業真實案例。
-      </li>
-      <li>
-        <span className="font-semibold text-gray-800">成果：</span>
-        認知高風險行為、學會預防與判斷可疑情況，將安全習慣融入工作流程，減少「唔小心」造成的災難。
-      </li>
-    </ul>
-  </div>
-  <div className="relative">
-    <div className="absolute -left-4 top-0 text-6xl font-bold text-gray-200">2</div>
-    <h4 className="text-xl font-medium text-gray-800 mb-4 ml-7">
-      AI（人工智能應用）
-    </h4>
-    <ul className="pl-5 text-gray-600 space-y-3 ml-2">
-      <li>
-        <span className="font-semibold text-gray-800">痛點：</span>
-        不懂AI實際應用方法，僅會操作工具，無法將AI融入日常工作創造價值。
-      </li>
-      <li>
-        <span className="font-semibold text-gray-800">教學：</span>
-        由入門到應用，教會AI各場景實用技巧，涵蓋Prompt提問、結果驗證、避坑方法，搭配工作實例教學。
-      </li>
-      <li>
-        <span className="font-semibold text-gray-800">成果：</span>
-        倍數提升工作效率，平均節省接近1/3時間，將能力擴大到更高價值的工作中。
-      </li>
-    </ul>
-  </div>
-  <div className="relative">
-    <div className="absolute -left-4 top-0 text-6xl font-bold text-gray-200">3</div>
-    <h4 className="text-xl font-medium text-gray-800 mb-4 ml-7">
-      Data Analytics（數據分析）
-    </h4>
-    <ul className="pl-5 text-gray-600 space-y-3 ml-2">
-      <li>
-        <span className="font-semibold text-gray-800">痛點：</span>
-        認為數據分析與自身無關，工作中需交KPI卻不懂「用數字講嘢」，決策缺乏數據支持。
-      </li>
-      <li>
-        <span className="font-semibold text-gray-800">教學：</span>
-        由實務問題出發，涵蓋數據提取、整理、清洗、分析、報表製作與數據呈現，連接至實際決策層面。
-      </li>
-      <li>
-        <span className="font-semibold text-gray-800">成果：</span>
-        學會用數據協助企業減成本、提效率，為發展找到更清晰的方向，各崗位都能活用數據。
-      </li>
-    </ul>
-  </div>
-  <div className="relative">
-    <div className="absolute -left-4 top-0 text-6xl font-bold text-gray-200">4</div>
-    <h4 className="text-xl font-medium text-gray-800 mb-4 ml-7">
-      客製化企業培訓課程｜上門培訓｜團報方案
-    </h4>
-    <ul className="pl-5 text-gray-600 space-y-3 ml-2">
-      <li>
-        <span className="font-semibold text-gray-800">課程設計：</span>
-        按行業、部門、崗位、現有系統與痛點，度身訂造學習路線與案例。
-      </li>
-      <li>
-        <span className="font-semibold text-gray-800">授課形式：</span>
-        上門／到校／到公司授課，配合企業時間（平日/週末/晚間），支援實體＋線上混合模式。
-      </li>
-      <li>
-        <span className="font-semibold text-gray-800">團報優勢：</span>
-        適用政府機構、上市公司、非牟利機構，支持同公司／同部門／跨部門組班，統一目標與交付物，學完即落地。
-      </li>
-    </ul>
-  </div>
-</div>
-        <div className="mt-12 h-80 overflow-hidden rounded-xl">
-          <Image 
-            src="/core.jpg" 
-            alt="科技課程" 
-            width={1920}
-            height={1080}
-            loading="lazy"
-            className="w-full h-full object-cover"
-          />
-        </div>
-        {/* More Button */}
-        <div className="flex justify-center mt-12">
-          <Link href='/core'>
-          <button className="px-6 py-2 bg-gray-800 text-white rounded-lg flex items-center gap-2 hover:bg-gray-700 transition-colors">
-            <span>了解更多 MORE</span>
-            <ChevronRight size={16} />
-          </button>
-          </Link>
-        </div>
-      </section>
-
-      {/* 合作機構區 */}
-      {/* <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h2 className="text-5xl font-light text-gray-400 mb-2 text-center">Previous Partner Organization</h2>
-        <h3 className="text-2xl font-semibold text-gray-700 mb-8 text-center">過往曾經合作機構</h3>
-        <div className="flex flex-wrap justify-center gap-8">
-          {partners.map((partner) => (
-            <div key={partner.id} className="w-24 h-12 overflow-hidden flex items-center justify-center">
-              <Image 
-                src={partner.logo} 
-                alt={partner.name} 
-                width={100}
-                height={100}
-                className="w-full h-full object-contain opacity-20 hover:opacity-100 transition-opacity"
-              />
+      {/* ========== 企業培訓計劃｜B2B ========== */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-gray-50 rounded-xl my-12 overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div>
+            <div className="border-l-4 border-cyan-700 pl-4 mb-6">
+              <h2 className="text-4xl font-semibold text-cyan-800">企業培訓計劃課程</h2>
+              <p className="text-gray-500 mt-2">NITTP資助｜中小企數碼轉型｜上門客製培訓</p>
             </div>
-          ))}
+            <p className="text-gray-600 mb-4 font-light">
+              為企業提供AI、數據分析、網絡安全及客製化培訓，協助團隊把科技能力真正落地到日常營運。
+            </p>
+            <div className="flex flex-wrap gap-2 mb-6">
+              <span className="px-3 py-1 bg-cyan-100 text-cyan-800 rounded-full text-sm">企業AI培訓</span>
+              <span className="px-3 py-1 bg-cyan-100 text-cyan-800 rounded-full text-sm">數據分析課程</span>
+              <span className="px-3 py-1 bg-cyan-100 text-cyan-800 rounded-full text-sm">網絡安全培訓</span>
+              <span className="px-3 py-1 bg-cyan-100 text-cyan-800 rounded-full text-sm">客製化團培</span>
+            </div>
+            <div className="flex flex-wrap gap-4">
+              <Link href="/corporate">
+                <button className="px-5 py-2 bg-cyan-700 text-white rounded-3xl flex items-center gap-2 hover:bg-cyan-800 transition-colors">
+                  <span>瀏覽企業課程</span>
+                  <ChevronRight size={16} />
+                </button>
+              </Link>
+              <Link href="https://wa.me/51001888">
+                <button className="px-5 py-2 border-2 border-cyan-700 text-cyan-700 rounded-3xl flex items-center gap-2 hover:bg-cyan-700 hover:text-white transition-colors">
+                  <span>WhatsApp查詢</span>
+                  <ChevronRight size={16} />
+                </button>
+              </Link>
+            </div>
+          </div>
+          {/* 右側背景圖卡片 */}
+          <div className="relative h-96 rounded-xl overflow-hidden">
+            <Image
+              src="/core.jpg"
+              alt="企業科技課程 AI 數據分析 網絡安全培訓 NITTP資助"
+              fill
+              sizes="(max-width:768px)100vw,50vw"
+              loading="lazy"
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-cyan-900/10"></div>
+          </div>
         </div>
-      </section> */}
+      </section>
 
-      {/* 教育團隊區（已加入中文職稱） */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h2 className="text-5xl font-light text-gray-400 mb-2 text-center">Our Professional Team</h2>
-        <h3 className="text-2xl font-semibold text-gray-700 mb-8 text-center">我們專業的教育團隊</h3>
+      {/* ========== 個人課程特色｜B2C專屬模塊【新增平衡用】 ========== */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-semibold text-gray-800 mb-3">個人進修課程特色</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">小班實戰教學，適合在職人士利用工餘時間提升職場數碼技能</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-gray-50 p-6 rounded-xl">
+              <h3 className="font-semibold text-gray-800 mb-2">小班互動教學</h3>
+              <p className="text-sm text-gray-600">每班人數有限，導師可照顧每位學員，現場即時解答疑問</p>
+            </div>
+            <div className="bg-gray-50 p-6 rounded-xl">
+              <h3 className="font-semibold text-gray-800 mb-2">職場導向實習</h3>
+              <p className="text-sm text-gray-600">案例取自香港職場場景，學完可直接套用到日常工作</p>
+            </div>
+            <div className="bg-gray-50 p-6 rounded-xl">
+              <h3 className="font-semibold text-gray-800 mb-2">課程證書</h3>
+              <p className="text-sm text-gray-600">完成課程可獲培訓證書，用作個人技能履歷</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========== 靈活培訓模式｜B2B ========== */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-semibold text-gray-800 mb-3">靈活培訓模式</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">按企業場地、時間、團隊規模，彈性安排授課形式</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white p-6 rounded-xl shadow-sm">
+              <h3 className="font-semibold text-gray-800 mb-2">企業現場內訓</h3>
+              <p className="text-sm text-gray-600">到貴公司辦公室/廠房實體授課，直接使用企業真實個案練習</p>
+            </div>
+            <div className="bg-white p-6 rounded-xl shadow-sm">
+              <h3 className="font-semibold text-gray-800 mb-2">線上同步培訓</h3>
+              <p className="text-sm text-gray-600">遠端直播授課，跨分部員工同步參與，節省交通與場地成本</p>
+            </div>
+            <div className="bg-white p-6 rounded-xl shadow-sm">
+              <h3 className="font-semibold text-gray-800 mb-2">混合式培訓方案</h3>
+              <p className="text-sm text-gray-600">線上預習 + 實體工作坊，搭配課後練習與跟進輔導</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========== 企業培訓客戶｜B2B 行業覆蓋標籤 ========== */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-semibold text-gray-800 mb-3">企業培訓客戶</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              多年來為香港各行各業企業提供定制內部培訓，累計完成數十場企業內訓，逾千名在職員工參與課程。
+              服務對象涵蓋中小企、連鎖集團及專業服務團隊，課程包含網絡安全、AI應用、數據分析、流程自動化等企業數碼能力培訓，協助團隊提升數碼技能與營運效率。
+            </p>
+          </div>
+          <div className="flex flex-wrap justify-center gap-3">
+            <span className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm">零售連鎖</span>
+            <span className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm">金融服務</span>
+            <span className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm">製造廠房</span>
+            <span className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm">工程公司</span>
+            <span className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm">專業服務公司</span>
+            <span className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm">科技中小企</span>
+            <span className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm">NGO機構</span>
+          </div>
+          <div className="mt-8 text-center">
+            <Link href="/corporate" className="inline-block px-5 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700">
+              瀏覽企業培訓課程
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ========== 定制培訓流程｜B2B ========== */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-semibold text-gray-800 mb-3">定制培訓流程</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">由需求對接到課後成效跟進，一套完整企業培訓方案</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="text-center p-5">
+              <div className="w-10 h-10 rounded-full bg-gray-800 text-white flex items-center justify-center mx-auto mb-3">1</div>
+              <h3 className="font-semibold mb-2">需求諮詢</h3>
+              <p className="text-sm text-gray-600">了解業務痛點、團隊現有能力與培訓目標</p>
+            </div>
+            <div className="text-center p-5">
+              <div className="w-10 h-10 rounded-full bg-gray-800 text-white flex items-center justify-center mx-auto mb-3">2</div>
+              <h3 className="font-semibold mb-2">課程定制</h3>
+              <p className="text-sm text-gray-600">設計行業專屬案例、練習與評估標準</p>
+            </div>
+            <div className="text-center p-5">
+              <div className="w-10 h-10 rounded-full bg-gray-800 text-white flex items-center justify-center mx-auto mb-3">3</div>
+              <h3 className="font-semibold mb-2">培訓執行</h3>
+              <p className="text-sm text-gray-600">實體/線上授課，現場互動與實習練習</p>
+            </div>
+            <div className="text-center p-5">
+              <div className="w-10 h-10 rounded-full bg-gray-800 text-white flex items-center justify-center mx-auto mb-3">4</div>
+              <h3 className="font-semibold mb-2">成效跟進</h3>
+              <p className="text-sm text-gray-600">課後回饋、知識鞏固，協助落地應用</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========== 底部雙目標CTA｜同時服務企業及個人學員【新增平衡用】 ========== */}
+      <section className="py-16 bg-slate-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-semibold text-gray-100 mb-4">準備開始你的數碼技能培訓？</h2>
+          <p className="text-gray-400 max-w-xl mx-auto mb-8">
+            不論是企業團隊培訓或是個人在職進修，歡迎查詢課程詳情。
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link href="/corporate">
+              <button className="px-6 py-3 bg-cyan-700 text-white rounded-3xl flex items-center gap-2 hover:bg-cyan-800 transition-colors">
+                <span>企業培訓查詢</span>
+                <ChevronRight size={16} />
+              </button>
+            </Link>
+            <Link href="/courses">
+              <button className="px-6 py-3 bg-slate-700 text-white rounded-3xl flex items-center gap-2 hover:bg-slate-800 transition-colors">
+                <span>瀏覽個人課程</span>
+                <ChevronRight size={16} />
+              </button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ========== 教育團隊區｜共用信任模塊（保留名字，無頭像） ========== */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <h2 className="text-3xl font-semibold text-gray-800 text-center mb-2">我們專業的教育團隊</h2>
+        <p className="text-gray-500 text-center mb-8">擁有企業實戰經驗的講師團隊</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {teamMembers.map((member) => (
-            <div key={member.id} className="text-center">
-              {/* 头像容器（保留原样式） */}
-              <div className="relative w-32 h-32 rounded-full border-2 border-gray-200 overflow-hidden mx-auto mb-4">
-                <Image 
-                  src={member.avatar} 
-                  alt={member.name} 
-                  fill
-                  sizes="(max-width: 640px) 100px, 128px"
-                  className="object-cover"
-                />
-              </div>
-              {/* 姓名 + 中文職稱（新增） + 介绍 */}
-              <h4 className="text-lg font-medium text-gray-800 mb-1">{member.name}</h4>
-              <p className="text-cyan-700 text-sm font-medium mb-3">{member.title}</p> {/* 中文職稱，用主色突出 */}
-              <p className="text-gray-600 text-sm leading-relaxed">
+            <div key={member.id} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+              <h3 className="text-xl font-semibold text-gray-800 mb-1">{member.name}</h3>
+              <p className="text-cyan-700 text-sm font-medium mb-3">{member.title}</p>
+              <p className="text-gray-600 text-sm leading-relaxed mb-3">
+                {member.bioZH}
+              </p>
+              <p className="text-gray-500 text-xs leading-relaxed">
                 {member.bio}
               </p>
             </div>
           ))}
         </div>
-        {/* More Button */}
         <div className="flex justify-center mt-12">
-          <Link href='/ourteam'>
-          <button className="px-6 py-2 bg-gray-800 text-white rounded-lg flex items-center gap-2 hover:bg-gray-700 transition-colors">
-            <span>了解更多 MORE</span>
-            <ChevronRight size={16} />
-          </button>
+          <Link href="/ourteam">
+            <button className="px-6 py-2 bg-gray-800 text-white rounded-lg flex items-center gap-2 hover:bg-gray-700 transition-colors">
+              <span>了解更多講師資訊</span>
+              <ChevronRight size={16} />
+            </button>
           </Link>
         </div>
       </section>
 
-      <GoogleMap/>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

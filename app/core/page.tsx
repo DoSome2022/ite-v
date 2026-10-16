@@ -1,6 +1,6 @@
 'use client';
-import Nav from '../../components/Nav';
-import Footer from '../../components/Footer';
+import Nav from '@/components/Nav';
+import Footer from '@/components/Footer';
 
 // 定義課程數據數組
 const coreCourses = [
