@@ -6,12 +6,12 @@ import ITELOGO from "@/public/Logo.png";
 
 const publicNavItems = [
   { name: "企業培訓", engname: "Corporate", href: "/corporate" },
-  { name: "個人進修", engname: "Course", href: "/newcourses" },
+  { name: "個人進修", engname: "Course", href: "/courses" },
   { name: "最新消息", engname: "News", href: "/news" },
   { name: "教育團隊", engname: "Team", href: "/ourteam" },
   { name: "關於我們", engname: "About", href: "/about" },
   { name: "聯絡我們", engname: "Contact", href: "/contact" },
-  { name: "學生登錄", engname: "Student Login", href: "/student/login" },
+  { name: "學生登錄", engname: "Student Login", href: "/login" },
 ];
 
 export default function Navbar() {

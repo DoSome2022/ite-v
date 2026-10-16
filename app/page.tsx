@@ -76,14 +76,14 @@ export default function ITEEducationCenter() {
         </div>
       </section>
 
-      {/* ========== 個人科技進修｜B2C 上移 ========== */}
+      {/* ========== 個人科技進修｜B2C (課程介紹 + 課程特色 合併) ========== */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-2 border-slate-200 rounded-xl my-12 overflow-hidden">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-16">
           {/* 左側背景圖卡片 */}
-          <div className="relative h-96 rounded-xl overflow-hidden order-1 md:order-none">
+          <div className="relative h-36 md:h-96 rounded-xl overflow-hidden order-1 md:order-none">
             <Image
-              src="/core.jpg"
-              alt="香港個人AI課程 數據分析入門進修班 在職人士技能提升"
+              src="/image/home/banner_1.png"
+              alt="香港個人AI課程｜數據分析入門進修班，在職人士技能提升課程"
               fill
               sizes="(max-width:768px)100vw,50vw"
               loading="lazy"
@@ -97,7 +97,7 @@ export default function ITEEducationCenter() {
               <p className="text-gray-500 mt-2">公開小班｜在職人士進修｜可獲培訓證書</p>
             </div>
             <p className="text-gray-600 mb-4 font-light">
-              提供AI、數據分析入門、網絡安全入門公開班，小班實戰教學，適合在職人士提升職場技能。
+              提供AI、數據分析入門、網絡安全入門公開班，小班實戰教學，適合在職人士提升職場數碼技能。
             </p>
             <div className="flex flex-wrap gap-2 mb-6">
               <span className="px-3 py-1 bg-slate-100 text-slate-800 rounded-full text-sm">AI課程</span>
@@ -113,11 +113,30 @@ export default function ITEEducationCenter() {
             </Link>
           </div>
         </div>
+        {/* 個人課程特色，放在同一section內下方 */}
+        <div className="mb-10">
+          <h3 className="text-3xl font-semibold text-gray-800 mb-3">個人進修課程特色</h3>
+          <p className="text-gray-600 ">小班實戰教學，適合在職人士利用工餘時間提升職場數碼技能</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-gray-50 p-6 rounded-xl">
+            <h4 className="font-semibold text-gray-800 mb-2">小班互動教學</h4>
+            <p className="text-sm text-gray-600">每班人數有限，導師可照顧每位學員，現場即時解答疑問</p>
+          </div>
+          <div className="bg-gray-50 p-6 rounded-xl">
+            <h4 className="font-semibold text-gray-800 mb-2">職場導向實習</h4>
+            <p className="text-sm text-gray-600">案例取自香港職場場景，學完可直接套用到日常工作</p>
+          </div>
+          <div className="bg-gray-50 p-6 rounded-xl">
+            <h4 className="font-semibold text-gray-800 mb-2">課程證書</h4>
+            <p className="text-sm text-gray-600">完成課程可獲培訓證書，用作個人技能履歷</p>
+          </div>
+        </div>
       </section>
 
-      {/* ========== 企業培訓計劃｜B2B ========== */}
+      {/* ========== 企業培訓計劃｜B2B (課程介紹 + 靈活培訓模式 合併) ========== */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-gray-50 rounded-xl my-12 overflow-hidden">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-16">
           <div>
             <div className="border-l-4 border-cyan-700 pl-4 mb-6">
               <h2 className="text-4xl font-semibold text-cyan-800">企業培訓計劃課程</h2>
@@ -148,10 +167,10 @@ export default function ITEEducationCenter() {
             </div>
           </div>
           {/* 右側背景圖卡片 */}
-          <div className="relative h-96 rounded-xl overflow-hidden">
+          <div className="relative h-36 md:h-96 rounded-xl overflow-hidden">
             <Image
-              src="/core.jpg"
-              alt="企業科技課程 AI 數據分析 網絡安全培訓 NITTP資助"
+              src="/image/home/banner_2.png"
+              alt="企業科技培訓｜AI、數據分析、網絡安全團隊課程，NITTP資助中小企數碼轉型"
               fill
               sizes="(max-width:768px)100vw,50vw"
               loading="lazy"
@@ -160,52 +179,23 @@ export default function ITEEducationCenter() {
             <div className="absolute inset-0 bg-cyan-900/10"></div>
           </div>
         </div>
-      </section>
-
-      {/* ========== 個人課程特色｜B2C專屬模塊【新增平衡用】 ========== */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-semibold text-gray-800 mb-3">個人進修課程特色</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">小班實戰教學，適合在職人士利用工餘時間提升職場數碼技能</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-gray-50 p-6 rounded-xl">
-              <h3 className="font-semibold text-gray-800 mb-2">小班互動教學</h3>
-              <p className="text-sm text-gray-600">每班人數有限，導師可照顧每位學員，現場即時解答疑問</p>
-            </div>
-            <div className="bg-gray-50 p-6 rounded-xl">
-              <h3 className="font-semibold text-gray-800 mb-2">職場導向實習</h3>
-              <p className="text-sm text-gray-600">案例取自香港職場場景，學完可直接套用到日常工作</p>
-            </div>
-            <div className="bg-gray-50 p-6 rounded-xl">
-              <h3 className="font-semibold text-gray-800 mb-2">課程證書</h3>
-              <p className="text-sm text-gray-600">完成課程可獲培訓證書，用作個人技能履歷</p>
-            </div>
-          </div>
+        {/* 靈活培訓模式，放在同一section內下方 */}
+        <div className="mb-10">
+          <h3 className="text-3xl font-semibold text-gray-800 mb-3">靈活企業培訓模式</h3>
+          <p className="text-gray-600">按企業場地、時間、團隊規模，彈性安排客製授課形式</p>
         </div>
-      </section>
-
-      {/* ========== 靈活培訓模式｜B2B ========== */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-semibold text-gray-800 mb-3">靈活培訓模式</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">按企業場地、時間、團隊規模，彈性安排授課形式</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-white p-6 rounded-xl shadow-sm">
+            <h4 className="font-semibold text-gray-800 mb-2">企業現場內訓</h4>
+            <p className="text-sm text-gray-600">到貴公司辦公室/廠房實體授課，直接使用企業真實個案練習</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white p-6 rounded-xl shadow-sm">
-              <h3 className="font-semibold text-gray-800 mb-2">企業現場內訓</h3>
-              <p className="text-sm text-gray-600">到貴公司辦公室/廠房實體授課，直接使用企業真實個案練習</p>
-            </div>
-            <div className="bg-white p-6 rounded-xl shadow-sm">
-              <h3 className="font-semibold text-gray-800 mb-2">線上同步培訓</h3>
-              <p className="text-sm text-gray-600">遠端直播授課，跨分部員工同步參與，節省交通與場地成本</p>
-            </div>
-            <div className="bg-white p-6 rounded-xl shadow-sm">
-              <h3 className="font-semibold text-gray-800 mb-2">混合式培訓方案</h3>
-              <p className="text-sm text-gray-600">線上預習 + 實體工作坊，搭配課後練習與跟進輔導</p>
-            </div>
+          <div className="bg-white p-6 rounded-xl shadow-sm">
+            <h4 className="font-semibold text-gray-800 mb-2">線上同步培訓</h4>
+            <p className="text-sm text-gray-600">遠端直播授課，跨分部員工同步參與，節省交通與場地成本</p>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow-sm">
+            <h4 className="font-semibold text-gray-800 mb-2">混合式培訓方案</h4>
+            <p className="text-sm text-gray-600">線上預習 + 實體工作坊，搭配課後練習與跟進輔導</p>
           </div>
         </div>
       </section>
@@ -228,11 +218,6 @@ export default function ITEEducationCenter() {
             <span className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm">專業服務公司</span>
             <span className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm">科技中小企</span>
             <span className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm">NGO機構</span>
-          </div>
-          <div className="mt-8 text-center">
-            <Link href="/corporate" className="inline-block px-5 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700">
-              瀏覽企業培訓課程
-            </Link>
           </div>
         </div>
       </section>

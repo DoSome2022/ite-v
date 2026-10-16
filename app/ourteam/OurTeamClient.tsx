@@ -156,28 +156,6 @@ const teamMembers = [
   },
   {
   id: 6,
-  name: "Ms. CS Fung",
-  position: "Teacher",
-  avatar: Teacher_CSFung,
-  intro: "An adaptable and highly experienced educator who began her teaching journey at age 16, building over a decade of extensive experience in language instruction. Backed by an academic foundation in English Studies and complemented by studies in Japanese and Business, Ms. CS Fung has been continuously entrusted to lead engaging English Enhancement Courses across various primary and secondary schools. Uniquely positioning herself at the intersection of modern technology and education, she combines teaching pragmatism with current digital tech literacies.",
-  technicalBg: [
-    "Competent Technical Command: Equipped with a solid understanding of Artificial Intelligence (AI) applications and how modern educational tooling converges with everyday workflows.",
-    "Foundation in Programming: Formally trained in Full-stack web development basics, enabling logic-oriented systematic approaches to lesson plannings and complex problem-solving."
-  ],
-  educationalContrib: [
-    "Core Language Instruction: Over 10 years of consistent, successful delivery in designing and teaching English language enhancement components geared toward young educators and multi-level students in registered primary and secondary schools.",
-    "Pedagogical Translation: Highly regarded for her unique attribute of stripping down and simplifying immensely complex linguistic and technical concepts into digestible learning milestones for absolute beginners to intermediate learners.",
-    "Versatility in Delivery: Has developed a refined pedagogical toolkit to distinctively dynamically adapt teaching styles to address the widely ranging needs spanning different age groups."
-  ],
-  expertise: [
-    "Educational Subjects: English Studies / Japanese Language Basics / Business Frameworks",
-    "Instruction Design: English Enhancement Course Delivery / Cross-Age Cohort Pedagogical Design",
-    "Modern Tools: AI-assisted Learning Integration / Foundations in Full-Stack Web Methodologies"
-  ],
-  bio: "Equipped with a diverse fusion of linguistic and forward-looking capabilities, Ms. CS Fung excels at simplifying complex subjects for students. Her outstanding adaptive capacities guarantee that all curriculum learning outcomes are smoothly achieved and material perfectly understood natively across diverse age spectrums limitlessly."
-},
-{
-  id: 7,
   name: "Mr. Oscar Lo",
   position: "Analyst Programmer & Senior Educator",
   avatar: Teacher_Oscar,
@@ -203,32 +181,29 @@ const teamMembers = [
     "Project Management: Automated Productivity Tools / GUI-based Scrapers (PyQt5) / Market Data Analytics"
   ],
   bio: "His deep technical expertise combined with extensive enterprise development experience enables him to deliver industry-relevant education. By bridging the gap between corporate development at a multinational level and passionate classroom teaching, Oscar excels at empowering the next generation of tech talent with the exact skill sets demanded by today’s industry."
-},
+  },
   {
-  id: 8,
-  name: "Ms. Myra Ku",
-  position: "Teaching Assistant",
-  avatar: TA_Myra,
-  intro: "Aspiring and versatile professional with a burgeoning career in web development, underpinned by a solid foundation in business management and creative design. Myra holds a Bachelor of Business Administration (Hons) and a specialized Certificate in Front-End Website Development, bringing a unique blend of aesthetic sensibility and marketing acumen to technical projects. She combines practical experience in clean coding and responsive design with a history of driving sales and operational efficiency in corporate settings.",
+  id: 7,
+  name: "Ms. CS Fung",
+  position: "Teacher",
+  avatar: Teacher_CSFung,
+  intro: "An adaptable and highly experienced educator who began her teaching journey at age 16, building over a decade of extensive experience in language instruction. Backed by an academic foundation in English Studies and complemented by studies in Japanese and Business, Ms. CS Fung has been continuously entrusted to lead engaging English Enhancement Courses across various primary and secondary schools. Uniquely positioning herself at the intersection of modern technology and education, she combines teaching pragmatism with current digital tech literacies.",
   technicalBg: [
-    "Solid technical expertise in modern front-end technologies, with hands-on proficiency in writing clean, efficient code using HTML, CSS, JavaScript, and React.",
-    "Design-Driven Development: Leverages a strong background in design and tools like Adobe Creative Cloud and Figma to ensure user-friendly, responsive, and visually engaging web applications.",
-    "Data & Operations awareness: Equipped with data analysis skills using Power BI, SQL, and Python, complementing her ability to handle operations, SEO marketing, and digital platform management."
+    "Competent Technical Command: Equipped with a solid understanding of Artificial Intelligence (AI) applications and how modern educational tooling converges with everyday workflows.",
+    "Foundation in Programming: Formally trained in Full-stack web development basics, enabling logic-oriented systematic approaches to lesson plannings and complex problem-solving."
   ],
   educationalContrib: [
-    "Web Developer Trainee: Actively contributes to development teams by applying best practices in UX and responsive design, participating in brainstorming sessions, and delivering efficient code based on strict project requirements.",
-    "Marketing & Business Growth: Proven track record as a Sales and Marketing Executive, where she planned website content, executed SEO strategies, and designed advertisement artwork that increased brand exposure by 10-20%.",
-    "Operational Excellence: Demonstrated reliability in fast-paced environments as an Operations and Office Support Specialist, adept at coordinating delivery teams, handling emergency services, and communicating effectively with clients."
+    "Core Language Instruction: Over 10 years of consistent, successful delivery in designing and teaching English language enhancement components geared toward young educators and multi-level students in registered primary and secondary schools.",
+    "Pedagogical Translation: Highly regarded for her unique attribute of stripping down and simplifying immensely complex linguistic and technical concepts into digestible learning milestones for absolute beginners to intermediate learners.",
+    "Versatility in Delivery: Has developed a refined pedagogical toolkit to distinctively dynamically adapt teaching styles to address the widely ranging needs spanning different age groups."
   ],
   expertise: [
-    "Front-End Development: HTML/CSS/Tailwind CSS/JavaScript/React",
-    "Data & Logic: Python/SQL/Power BI",
-    "Design & UI/UX: Figma/Adobe Illustrator/Adobe Photoshop/Responsive Design",
-    "Business Tools: Microsoft Excel/Word",
-    "Marketing & Strategy: SEO Marketing/Website Content Planning/Online Sales Monitoring/Brand Image Development"
+    "Educational Subjects: English Studies / Japanese Language Basics / Business Frameworks",
+    "Instruction Design: English Enhancement Course Delivery / Cross-Age Cohort Pedagogical Design",
+    "Modern Tools: AI-assisted Learning Integration / Foundations in Full-Stack Web Methodologies"
   ],
-  bio: "She excels at leveraging her dual skills in coding and design to create engaging web applications that enhance user experience while aligning with core marketing principles. Her eagerness to implement innovative solutions makes her a adaptable contributor capable of bridging the gap between technical execution and business goals."
-  }
+  bio: "Equipped with a diverse fusion of linguistic and forward-looking capabilities, Ms. CS Fung excels at simplifying complex subjects for students. Her outstanding adaptive capacities guarantee that all curriculum learning outcomes are smoothly achieved and material perfectly understood natively across diverse age spectrums limitlessly."
+  },
 ];
 
 export default function OurTeamClient() {
