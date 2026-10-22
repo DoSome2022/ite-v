@@ -103,7 +103,7 @@ export default function StudentLoginClient() {
             </form>
 
             <div className="mt-8 text-center text-sm text-gray-500">
-              未有學生帳號或忘記密碼？請聯絡課程顧問開通帳號
+              未有學生帳號或忘記密碼？請聯絡課程顧問 
             </div>
           </div>
         </section>
