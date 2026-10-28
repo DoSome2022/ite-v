@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
-import Nav from '../../components/Nav';
-import Footer from '../../components/Footer';
+import Nav from '../../../components/Nav';
+import Footer from '../../../components/Footer';
 import { AlertCircle, CheckCircle, Send, Phone, Mail, MapPin, Clock } from 'lucide-react';
 
 // 定義表單數據類型

@@ -1,3 +1,4 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 // @ts-expect-error Next.js handles global CSS imports at build time.
@@ -31,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="zh-HK">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

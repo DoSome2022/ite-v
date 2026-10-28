@@ -1,7 +1,7 @@
 'use client';
 import { ChevronRight } from 'lucide-react';
-import Nav from '../../../components/Nav';
-import Footer from '../../../components/Footer';
+import Nav from '../../../../components/Nav';
+import Footer from '../../../../components/Footer';
 
 // 模擬數據
 const eventData = {
