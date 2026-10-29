@@ -30,6 +30,8 @@
 | 圖示 | lucide-react | ^0.562.0 |
 | 建置工具 | PostCSS + @tailwindcss/postcss | 8.5.32（npm overrides）/ 4.3.3 |
 | Lint | ESLint 9 + eslint-config-next | 16.1.1 |
+| 容器化 | Docker（多階段建置，standalone 輸出） | node:20-slim |
+| 快取 / 限流 | Redis 7（ioredis） | redis:7-alpine |
 
 關鍵特點：
 
@@ -113,10 +115,15 @@ ite-v2/
 │       ├── comments/            # 學生評語
 │       └── hourlog/             # 教學計鐘
 ├── components/                  # 可重用 UI 元件（詳見第 6 節）
-├── lib/                         # 工具函式庫（目前為空，詳見第 7 節）
+├── lib/                         # 工具函式庫
+│   └── redis.ts                 # Redis 連線、限流、提交記錄（詳見第 15 章）
 ├── types/                       # TypeScript 型別定義
 │   └── index.ts
 ├── public/                      # 靜態資源（圖片、Logo）
+├── Dockerfile                   # 多階段建置（standalone，詳見第 15 章）
+├── docker-compose.yml           # app + redis 服務
+├── .dockerignore
+├── .env.example                 # REDIS_URL 環境變數範例
 ├── package.json / tsconfig.json / next.config.ts / postcss.config.mjs / eslint.config.mjs
 └── README.md
 ```
@@ -228,16 +235,15 @@ Tailwind v4 風格的入口樣式：
 
 ## 7. `lib/` 目錄說明
 
-`lib/` 目錄**目前是空的**（沒有任何檔案）。
+### 7.1 `lib/redis.ts` — Redis 連線與工具函式
 
-在 Next.js 專案慣例中，`lib/` 通常用於放置：
+- `redis`：全域 ioredis 連線（環境變數 `REDIS_URL`，預設 `redis://localhost:6379`）。
+  - `maxRetriesPerRequest: 1` + `commandTimeout: 3000`：Redis 離線時指令最多等 3 秒即失敗。
+  - 斷線後背景重試（1s 起遞增、每 10s 最多一次），Redis 恢復後自動重連。
+- `rateLimit(key, limit, windowSeconds)`：滑動窗口限流（Redis sorted set 實現），超過上限回傳 `allowed: false`；**Redis 離線時一律放行**，避免 Redis 故障拖垮網站。
+- `recordSubmission(listKey, data)`：把表單提交 push 到 Redis list（只保留最近 1000 筆）；Redis 離線時靜默略過。
 
-- 資料庫連線（Prisma / ORM client）
-- API 工具函式
-- 商業邏輯（utils / helpers）
-- 資料模型或 mock 資料
-
-目前專案尚未建立這些共用模組，所有 mock 資料與型別都直接寫在各 `page.tsx` / `*Client.tsx` 檔案內。未來若要接上後端，建議在此建立：
+其餘 mock 資料與型別仍直接寫在各 `page.tsx` / `*Client.tsx` 檔案內。未來若要接上後端，建議繼續在此建立：
 
 - `lib/db.ts` — 資料庫連線
 - `lib/auth.ts` — 登入驗證
@@ -463,19 +469,43 @@ Tailwind v4 風格的入口樣式：
 
 ## 14. 已知待辦 / 注意事項
 
-1. **API Routes 為示範 stub**：`/api/send-contact`、`/api/send-enquiry` 已建立（`app/api/`），目前僅 console log 收到的資料並回傳成功，**未接 SMTP / 電郵服務**；`/api/student/login` 仍未實作（登入目前為前端模擬）。正式上線前必須接入電郵發送，否則真實查詢會流失。
+1. **API Routes 為示範 stub**：`/api/send-contact`、`/api/send-enquiry` 已建立（`app/api/`），目前僅 console log 收到的資料並回傳成功，**未接 SMTP / 電郵服務**；提交內容會記錄到 Redis（`ite:contact-submissions` / `ite:enquiry-submissions`），並設每 IP 每小時 5 次限流；`/api/student/login` 仍未實作（登入目前為前端模擬）。正式上線前必須接入電郵發送，否則真實查詢會流失。
 2. **後台/學生/導師資料皆為前端 mock**：所有資料寫死在各頁面，無資料庫與後端串接。
-3. **`lib/` 目錄為空**：尚無共用工具函式或資料層。
-4. **多套並存的舊版頁面**：`corporate/v1.tsx`、`corporate/v2.tsx`、`courses_v1/`、`newpage/` 為備份或實驗版本，與正式頁面重複，建議後續清理。
-5. **`Logo_Blue.png` 缺失**：`corporate/v1.tsx` 導入 `Logo_Blue.png`，但 `public/` 中不存在此檔（正式版 `CorporateClient.tsx` 已改用 `Logo.png`；v1/v2 為未使用檔案，不影響 build）。
-6. **元件命名不一致**：`WaveHeroBg.tsx` 的 default export 名稱是 `WhiteOscilloscopeHeroBg`；`Nav.tsx` 是 `Navbar`；`Footer.tsx` 是 `ITEFooter`；`GoogleMap.tsx` 是 `ITEGoogleMap`，導入時以實際函式名為準。
-7. **`types/index.ts` 未被充分利用**：後台頁面多數自行定義 local type，與 `types/` 的通用型別並存，未來可統一。
-8. **news 頁面使用原生 `<img>`**：`news/`、`news/post/`、`news/tech-news/` 直接使用 `<img>`（ESLint 17 個 warning），未來可改用 `next/image` 並在 `next.config.ts` 設定 `remotePatterns` 允許 picsum.photos。
+3. **多套並存的舊版頁面**：`corporate/v1.tsx`、`corporate/v2.tsx`、`courses_v1/`、`newpage/` 為備份或實驗版本，與正式頁面重複，建議後續清理。
+4. **`Logo_Blue.png` 缺失**：`corporate/v1.tsx` 導入 `Logo_Blue.png`，但 `public/` 中不存在此檔（正式版 `CorporateClient.tsx` 已改用 `Logo.png`；v1/v2 為未使用檔案，不影響 build）。
+5. **元件命名不一致**：`WaveHeroBg.tsx` 的 default export 名稱是 `WhiteOscilloscopeHeroBg`；`Nav.tsx` 是 `Navbar`；`Footer.tsx` 是 `ITEFooter`；`GoogleMap.tsx` 是 `ITEGoogleMap`，導入時以實際函式名為準。
+6. **`types/index.ts` 未被充分利用**：後台頁面多數自行定義 local type，與 `types/` 的通用型別並存，未來可統一。
+7. **news 頁面使用原生 `<img>`**：`news/`、`news/post/`、`news/tech-news/` 直接使用 `<img>`（ESLint 17 個 warning），未來可改用 `next/image` 並在 `next.config.ts` 設定 `remotePatterns` 允許 picsum.photos。
+8. **本地 Node 18 注意**：若本地 `npm ci` 裝到 `sharp@0.35.5`（next 的 optional dependency，在 Node 18 上無法載入），build 會失敗；刪除 `node_modules/sharp` 即可（專案已設 `images.unoptimized`，無需 sharp）。Docker 內使用 Node 20，不受影響。
 
 ---
 
-## 15. 2026-10-29 修復記錄（Bug Fix Changelog）
+## 15. Docker 與 Redis
 
+### 15.1 Docker
+
+- **`Dockerfile`**：三階段建置（`node:20-slim`）— 依賴 `npm ci` → `npm run build` → 執行階段只複製 `.next/standalone` 產物 + `public/` + 靜態資源，以非 root 用戶 `nextjs` 執行。
+- **`next.config.ts` 相關設定**：
+  - `output: "standalone"` — 讓映像只含最小執行檔。
+  - `outputFileTracingRoot: path.resolve(".")` — 防止 Next 向上偵測到上層目錄遺留的 lockfile，產生錯誤的 nested standalone 輸出。
+  - `images.unoptimized: true` — 圖片直接由 `public/` 提供、不經優化器，免去 sharp 原生依賴（亦避免 Node 18 相容問題）。
+- **`.dockerignore`**：排除 `node_modules`、`.next`、`.git`、文檔與環境檔。
+- **啟動**：`docker compose up -d --build`；本機 port 預設 3000，可用 `APP_PORT=3002 docker compose up -d` 覆寫。
+
+### 15.2 Redis
+
+- **`docker-compose.yml`** 內附 `redis:7-alpine` 服務：持久化 volume（`redis-data`）、healthcheck、自動重啟；app 服務透過 `depends_on: service_healthy` 等 Redis 就緒才啟動。
+- **`lib/redis.ts`** 提供（詳見 7.1）：
+  - `rateLimit`：表單 API 每 IP 每小時 5 次，超過回 429。
+  - `recordSubmission`：提交內容 push 到 Redis list 供日後後台讀取 / 排程處理。
+- **降級策略**：Redis 離線時表單照常運作（限流放行、記錄略過），單次請求最多等 3 秒（`commandTimeout`）。
+- **環境變數**：`REDIS_URL`（見 `.env.example`；Docker Compose 內自動指向 redis 服務；本地開發預設 `redis://localhost:6379`）。
+
+---
+
+## 16. 2026-10-29 修復記錄（Bug Fix Changelog）
+
+- **Docker + Redis**：新增 Dockerfile（standalone 三階段建置）、docker-compose.yml（app + redis 7）、`lib/redis.ts`（滑動窗口限流 + 提交記錄 + 離線降級）、`.env.example`；兩個表單 API 加入每 IP 每小時 5 次限流（超過回 429）與 Redis 提交記錄。
 - **依賴與安全**：Next.js 15.5.6 → 15.5.28（修復 Critical RCE 漏洞）；PostCSS 升至 8.5.32，並以 npm `overrides` 強制 Next 內部的舊版 postcss 同步升級；`npm audit` 現為 0 vulnerabilities。
 - **Build 修復**：移除 `app/layout.tsx` 多餘的 `@ts-expect-error`；修復全部 12 個 ESLint error（`news/tech-news` 缺 key、`privacy-policy` 未轉義引號與 `<a>` 改 `<Link>`、`corporate/layout.tsx` 的 `<Script>` 補 id、兩個 HeroBg 的 `let`→`const`、`StudentLoginClient` 移除 `any` 型別）。
 - **/courses 篩選**：資助標籤改為 `{label, keywords}` 結構，修復「勾選任何資助選項即 0 結果」；分類 radio 可再次點擊取消；分頁改為真實運作（每頁 3 個，篩選後重置頁碼）。

@@ -1,0 +1,34 @@
+# InnoTrendEDU (ite-v2) — Next.js App + Redis
+# 啟動：docker compose up -d --build
+services:
+  app:
+    build: .
+    container_name: ite-app
+    ports:
+      # 本機 port 可用 APP_PORT 覆寫，例如：APP_PORT=3002 docker compose up -d
+      - "${APP_PORT:-3000}:3000"
+    environment:
+      # 容器網路內指向 redis 服務
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: ite-redis
+    ports:
+      # 供本地除錯用；生產環境可移除
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  redis-data:
