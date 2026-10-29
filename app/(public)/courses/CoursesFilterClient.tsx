@@ -20,7 +20,7 @@ type CourseItem = {
 type FilterOpts = {
   categories: string[];
   levels: string[];
-  fundingTags: string[];
+  fundingTags: { label: string; keywords: string[] }[];
   modes: string[];
 };
 
@@ -53,10 +53,13 @@ export default function CoursesFilterClient({ courseList, filterOpts }: Props) {
   });
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 3;
 
   // 點擊【確認套用篩選】
   const handleApplyFilter = () => {
     setAppliedFilter({ ...tempFilter });
+    setPage(1);
     setIsFilterOpen(false);
   };
 
@@ -70,6 +73,7 @@ export default function CoursesFilterClient({ courseList, filterOpts }: Props) {
     };
     setTempFilter(emptyState);
     setAppliedFilter(emptyState);
+    setPage(1);
   };
 
   // 計算過濾後課程（依 appliedFilter）
@@ -93,13 +97,24 @@ export default function CoursesFilterClient({ courseList, filterOpts }: Props) {
 
       // 資助標籤多選
       if (appliedFilter.selectedFunding.length > 0) {
-        const hasTag = appliedFilter.selectedFunding.some(tag => course.tags.some(t => t.includes(tag)));
+        const hasTag = appliedFilter.selectedFunding.some(label => {
+          const opt = filterOpts.fundingTags.find(f => f.label === label);
+          if (!opt) return false;
+          return course.tags.some(t =>
+            opt.keywords.some(k => t.toLowerCase().includes(k.toLowerCase()))
+          );
+        });
         if (!hasTag) return false;
       }
 
       return true;
     });
-  }, [courseList, appliedFilter]);
+  }, [courseList, appliedFilter, filterOpts]);
+
+  // 分頁
+  const totalPages = Math.max(1, Math.ceil(filteredCourses.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const pagedCourses = filteredCourses.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   const toggleLevel = (level: string) => {
     const arr = tempFilter.selectedLevels.includes(level)
@@ -153,7 +168,8 @@ export default function CoursesFilterClient({ courseList, filterOpts }: Props) {
                     name="category"
                     className="hidden"
                     checked={tempFilter.category === cat}
-                    onChange={() => setTempFilter(p => ({ ...p, category: p.category === cat ? null : cat }))}
+                    onChange={() => setTempFilter(p => ({ ...p, category: cat }))}
+                    onClick={() => setTempFilter(p => ({ ...p, category: p.category === cat ? null : cat }))}
                   />
                   <span className={`${tempFilter.category === cat ? 'text-blue-700 font-medium' : 'text-slate-600'}`}>{cat}</span>
                 </label>
@@ -186,14 +202,14 @@ export default function CoursesFilterClient({ courseList, filterOpts }: Props) {
             <h3 className="font-bold text-slate-900 mb-4">資助與認證</h3>
             <div className="space-y-2">
               {filterOpts.fundingTags.map((item) => (
-                <label key={item} className="flex items-center gap-3 cursor-pointer">
+                <label key={item.label} className="flex items-center gap-3 cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={tempFilter.selectedFunding.includes(item)}
-                    onChange={() => toggleFunding(item)}
+                    checked={tempFilter.selectedFunding.includes(item.label)}
+                    onChange={() => toggleFunding(item.label)}
                     className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                   />
-                  <span className="text-slate-600">{item}</span>
+                  <span className="text-slate-600">{item.label}</span>
                 </label>
               ))}
             </div>
@@ -238,7 +254,7 @@ export default function CoursesFilterClient({ courseList, filterOpts }: Props) {
         </div>
 
         <div className="space-y-6">
-          {filteredCourses.map((course) => (
+          {pagedCourses.map((course) => (
             <div key={course.id} className="group bg-white rounded-xl border border-slate-200 p-6 hover:shadow-lg hover:border-blue-200 transition-all duration-300 relative overflow-hidden">
               {course.isFeatured && (
                 <div className="absolute top-0 right-0 bg-orange-100 text-orange-700 text-xs font-bold px-3 py-1 rounded-bl-lg">
@@ -312,16 +328,39 @@ export default function CoursesFilterClient({ courseList, filterOpts }: Props) {
         )}
 
         {/* 分頁 */}
-        <div className="mt-12 flex justify-center">
-          <nav className="flex items-center gap-2">
-            <button className="p-2 border border-slate-200 rounded-md text-slate-400 hover:text-slate-600 disabled:opacity-50" disabled>上一頁</button>
-            <button className="w-10 h-10 bg-slate-700 text-white rounded-md font-bold">1</button>
-            <button className="w-10 h-10 hover:bg-slate-100 text-slate-600 rounded-md font-medium transition">2</button>
-            <button className="w-10 h-10 hover:bg-slate-100 text-slate-600 rounded-md font-medium transition">3</button>
-            <span className="text-slate-400 px-2">...</span>
-            <button className="p-2 border border-slate-200 rounded-md text-slate-600 hover:bg-slate-50">下一頁</button>
-          </nav>
-        </div>
+        {filteredCourses.length > 0 && (
+          <div className="mt-12 flex justify-center">
+            <nav className="flex items-center gap-2">
+              <button
+                onClick={() => setPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="p-2 border border-slate-200 rounded-md text-slate-400 hover:text-slate-600 disabled:opacity-50"
+              >
+                上一頁
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+                <button
+                  key={p}
+                  onClick={() => setPage(p)}
+                  className={`w-10 h-10 rounded-md font-bold transition ${
+                    p === currentPage
+                      ? 'bg-slate-700 text-white'
+                      : 'hover:bg-slate-100 text-slate-600 font-medium'
+                  }`}
+                >
+                  {p}
+                </button>
+              ))}
+              <button
+                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="p-2 border border-slate-200 rounded-md text-slate-600 hover:bg-slate-50 disabled:opacity-50"
+              >
+                下一頁
+              </button>
+            </nav>
+          </div>
+        )}
       </div>
     </div>
   );

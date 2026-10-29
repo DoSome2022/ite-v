@@ -27,6 +27,10 @@ const mockPayroll: TutorPayroll[] = [
   }
 ];
 
+// 以香港時區取得今天日期（toISOString 為 UTC，凌晨時段會記錯一天）
+const getTodayHK = () =>
+  new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Hong_Kong' });
+
 export default function AdminTutorPayrollPage() {
   const [list, setList] = useState<TutorPayroll[]>(mockPayroll);
 
@@ -37,7 +41,7 @@ export default function AdminTutorPayrollPage() {
       return {
         ...p,
         status: newStatus,
-        payDate: newStatus === 'paid' ? new Date().toISOString().slice(0,10) : ''
+        payDate: newStatus === 'paid' ? getTodayHK() : ''
       };
     }));
   };

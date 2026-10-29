@@ -57,7 +57,7 @@ export default function ContactFormSection() {
       } else {
         alert('提交失敗，請稍後再試或透過WhatsApp聯絡我們');
       }
-    } catch (err) {
+    } catch {
       alert('提交失敗，請稍後再試或透過WhatsApp聯絡我們');
     } finally {
       setLoading(false);

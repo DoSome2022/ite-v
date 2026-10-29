@@ -24,6 +24,7 @@ type Semester = {
   dates: string[];
   startTime: string;
   endTime: string;
+  mode: string;
 };
 interface CourseDetail {
   id: string;
@@ -43,7 +44,6 @@ interface CourseDetail {
 interface courseInfo {
   id: string;
   title: string;
-  schedule: string;
   difficulty: CourseDifficulty;
   icon: React.ReactNode;
   totalHours: number;
@@ -53,7 +53,6 @@ interface courseInfo {
 const courseInfo: courseInfo = {
   id: "ai",
   title: "AI（人工智能應用）",
-  schedule: "平日班",
   difficulty: "中級",
   icon: <Brain className="h-10 w-10 text-cyan-600" />,
   totalHours: 16,
@@ -81,21 +80,24 @@ const courseDetail: CourseDetail = {
       name: "2026年第一學期（平日班）",
       dates: ["2026年3月10日", "2026年3月17日", "2026年3月24日", "2026年3月31日"],
       startTime: "19:00",
-      endTime: "21:00"
+      endTime: "21:00",
+      mode: "平日班"
     },
     {
       id: "semester2",
       name: "2026年第一學期（週末班）",
       dates: ["2026年3月15日", "2026年3月22日", "2026年4月5日", "2026年4月12日"],
       startTime: "10:00",
-      endTime: "12:00"
+      endTime: "12:00",
+      mode: "週末班"
     },
     {
       id: "semester3",
       name: "2026年第二學期（平日班）",
       dates: ["2026年5月12日", "2026年5月19日", "2026年5月26日", "2026年6月2日"],
       startTime: "19:30",
-      endTime: "21:30"
+      endTime: "21:30",
+      mode: "平日班"
     }
   ],
   fitFor: "市場、行政、寫作、研發、管理層等所有崗位，尤其適合希望提升工作效率、快速掌握新工具的上班族、創業者及在職人士。無需 AI 基礎，零門檻入學。",
@@ -120,7 +122,24 @@ const difficultyStyles: Record<CourseDifficulty, string> = {
 export default function CourseDetailPage() {
   const [selectedSemester, setSelectedSemester] = useState<string>(courseDetail.semesters[0].id);
   const [showEnrollForm, setShowEnrollForm] = useState<boolean>(false);
+  const [enrollLoading, setEnrollLoading] = useState<boolean>(false);
+  const [enrollSubmitted, setEnrollSubmitted] = useState<boolean>(false);
   const currentSemester = courseDetail.semesters.find(sem => sem.id === selectedSemester)!;
+
+  const handleEnrollSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setEnrollLoading(true);
+    // 模擬提交（接後端時改為 fetch('/api/enroll', { method: 'POST', body: JSON.stringify(...) })）
+    setTimeout(() => {
+      setEnrollLoading(false);
+      setEnrollSubmitted(true);
+    }, 1200);
+  };
+
+  const closeEnrollForm = () => {
+    setShowEnrollForm(false);
+    setEnrollSubmitted(false);
+  };
 
   return (
     <>
@@ -162,7 +181,7 @@ export default function CourseDetailPage() {
           <Calendar className="h-4 w-4 text-cyan-700" />
           <div>
             <p className="text-xs text-gray-500">課程模式</p>
-            <p className="text-sm font-medium">{courseInfo.schedule}</p>
+            <p className="text-sm font-medium">{currentSemester.mode}</p>
           </div>
         </div>
         <div className="flex items-center gap-2 text-gray-700">
@@ -328,7 +347,7 @@ export default function CourseDetailPage() {
               <div className="p-6 border-b border-gray-200 flex justify-between items-center">
                 <h2 className="text-2xl font-bold text-gray-800">課程報名表</h2>
                 <button
-                  onClick={() => setShowEnrollForm(false)}
+                  onClick={closeEnrollForm}
                   className="text-gray-500 hover:text-gray-700"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -336,25 +355,44 @@ export default function CourseDetailPage() {
                   </svg>
                 </button>
               </div>
+              {enrollSubmitted ? (
+                <div className="p-8 text-center">
+                  <CheckCircle className="h-12 w-12 text-cyan-600 mx-auto mb-4" />
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">報名申請已提交</h3>
+                  <p className="text-gray-600 mb-6">我們將於 1 個工作天內與你聯絡確認報名詳情</p>
+                  <button
+                    onClick={closeEnrollForm}
+                    className="bg-cyan-700 text-white px-8 py-3 rounded-3xl hover:bg-cyan-800 transition-colors font-medium"
+                  >
+                    關閉
+                  </button>
+                </div>
+              ) : (
               <div className="p-6">
-                <form className="space-y-5">
+                <form className="space-y-5" onSubmit={handleEnrollSubmit}>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">姓名 *</label>
-                      <input type="text" className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none" required />
+                      <input name="name" type="text" className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none" required />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">聯絡電話 *</label>
-                      <input type="tel" className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none" required />
+                      <input name="phone" type="tel" className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none" required />
                     </div>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">電子郵箱 *</label>
-                    <input type="email" className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none" required />
+                    <input name="email" type="email" className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none" required />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">選擇學期 *</label>
-                    <select className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none" required>
+                    <select
+                      name="semester"
+                      value={selectedSemester}
+                      onChange={(e) => setSelectedSemester(e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none"
+                      required
+                    >
                       {courseDetail.semesters.map((semester) => (
                         <option key={semester.id} value={semester.id}>
                           {semester.name}
@@ -381,11 +419,16 @@ export default function CourseDetailPage() {
                       <span>我已閱讀並同意《課程條款與細則》及《隱私政策聲明》*</span>
                     </label>
                   </div>
-                  <button type="submit" className="w-full bg-cyan-700 text-white py-3 rounded-3xl hover:bg-cyan-800 transition-colors font-medium">
-                    提交報名
+                  <button
+                    type="submit"
+                    disabled={enrollLoading}
+                    className="w-full bg-cyan-700 text-white py-3 rounded-3xl hover:bg-cyan-800 transition-colors font-medium disabled:opacity-60"
+                  >
+                    {enrollLoading ? '提交中...' : '提交報名'}
                   </button>
                 </form>
               </div>
+              )}
             </div>
           </div>
         )}

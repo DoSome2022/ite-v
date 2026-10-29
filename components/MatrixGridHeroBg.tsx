@@ -10,7 +10,6 @@ export default function MatrixGridHeroBg() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let resizeObserver: ResizeObserver;
     let animationId: number;
     let lastTimestamp = 0;
     const TARGET_FPS = 30;
@@ -82,7 +81,7 @@ export default function MatrixGridHeroBg() {
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     if(motionQuery.matches) isVisible = false;
 
-    resizeObserver = new ResizeObserver(() => {
+    const resizeObserver = new ResizeObserver(() => {
       setCanvasSize();
     });
     resizeObserver.observe(canvas);

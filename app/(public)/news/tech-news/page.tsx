@@ -49,8 +49,8 @@ export default function TechNewsPage() {
           <h2 className="text-2xl font-light text-gray-500 mb-8">技術資訊</h2>
           <div className="grid gap-6 mb-6">
             {articles.map((article, idx) => (
-              <Link href={article.link}>
-                <div key={idx} className="flex gap-4">
+              <Link href={article.link} key={idx}>
+                <div className="flex gap-4">
                   <img 
                     src={article.img} 
                     alt={`Article ${idx+1}`} 

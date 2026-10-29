@@ -30,20 +30,47 @@ export default function AdminCoursePage() {
     deposit: 500,
     minStudent: 6
   });
+  // 正在編輯的課程原始編號（null = 新增模式）
+  const [editingId, setEditingId] = useState<string | null>(null);
+
+  const resetForm = () => {
+    setForm({ id:'', title:'', brochureText:'', fee:0, deposit:500, minStudent:6 });
+    setEditingId(null);
+  };
+
+  const startEdit = (c: Course) => {
+    setForm(c);
+    setEditingId(c.id);
+  };
 
   const submit = () => {
-    if (!form.id || !form.title) return;
-    const exist = courseList.find(x=>x.id === form.id);
-    if (exist) {
-      setCourseList(prev => prev.map(x=>x.id === form.id ? form : x));
-    } else {
-      setCourseList([...courseList, form]);
+    if (!form.id.trim() || !form.title.trim()) return;
+    if (form.fee < 0) {
+      alert('學費不可為負數');
+      return;
     }
-    setForm({id:'',title:'',brochureText:'',fee:0,deposit:500,minStudent:6})
+    if (form.minStudent < 1) {
+      alert('開班最低人數必須至少為 1 人');
+      return;
+    }
+    if (editingId !== null) {
+      // 編輯模式：按「原始編號」更新，允許修改課程 ID 本身
+      setCourseList(prev => prev.map(x => x.id === editingId ? { ...form, id: form.id.trim() } : x));
+    } else {
+      // 新增模式：拒絕重複 ID，避免靜默覆蓋舊課程
+      if (courseList.some(x => x.id === form.id.trim())) {
+        alert(`課程 ID ${form.id.trim()} 已存在，請改用其他 ID`);
+        return;
+      }
+      setCourseList(prev => [...prev, { ...form, id: form.id.trim() }]);
+    }
+    resetForm();
   };
 
   const remove = (cid:string) => {
-    setCourseList(prev => prev.filter(x=>x.id !== cid))
+    setCourseList(prev => prev.filter(x=>x.id !== cid));
+    // 若刪除的正是表單中正在編輯的課程，清空表單避免「復活」
+    if (editingId === cid) resetForm();
   };
 
   return (
@@ -53,7 +80,7 @@ export default function AdminCoursePage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-1 bg-white rounded-xl border border-gray-200 p-5">
-          <h2 className="font-semibold mb-4 text-slate-700">新增 / 編輯課程</h2>
+          <h2 className="font-semibold mb-4 text-slate-700">{editingId ? `編輯課程 ${editingId}` : '新增 / 編輯課程'}</h2>
           <div className="space-y-3">
             <div>
               <label className="text-sm text-gray-600 block mb-1">課程ID</label>
@@ -108,12 +135,17 @@ export default function AdminCoursePage() {
                 className="w-full border border-gray-200 rounded-lg px-3 py-2"
               />
             </div>
-            <button
-              onClick={submit}
-              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
-            >
-              儲存課程
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={submit}
+                className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+              >
+                儲存課程
+              </button>
+              {editingId && (
+                <button onClick={resetForm} className="px-4 border border-gray-200 text-gray-600 py-2 rounded-lg hover:bg-gray-50">取消</button>
+              )}
+            </div>
           </div>
         </div>
 
@@ -124,7 +156,10 @@ export default function AdminCoursePage() {
               <div key={c.id} className="p-4 border border-gray-100 rounded-lg bg-gray-50">
                 <div className="flex justify-between">
                   <p className="font-semibold text-slate-800">{c.id}｜{c.title}</p>
-                  <button onClick={()=>remove(c.id)} className="text-red-500 text-sm">刪除</button>
+                  <div className="flex gap-3">
+                    <button onClick={()=>startEdit(c)} className="text-blue-600 text-sm">編輯</button>
+                    <button onClick={()=>remove(c.id)} className="text-red-500 text-sm">刪除</button>
+                  </div>
                 </div>
                 <p className="text-sm text-gray-600 mt-2">{c.brochureText}</p>
                 <div className="mt-2 text-sm">

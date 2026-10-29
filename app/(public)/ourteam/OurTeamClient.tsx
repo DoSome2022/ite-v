@@ -12,7 +12,6 @@ import Teacher_HoncyLee from "@/public/Teacher_HoncyLee.webp";
 import Teacher_Eric from "@/public/Teacher_Eric.png";
 import Teacher_JTsang from "@/public/Teacher_JTsang.png";
 import Teacher_Antoninus from "@/public/Teacher_Antoninus.jpeg";
-import TA_Myra from "@/public/TA_Myra.jpeg";
 import Teacher_CSFung from "@/public/Teacher_CSFung.png";
 import Teacher_Oscar from "@/public/Teacher_Oscar.jpeg";
 

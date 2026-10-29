@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import CoursesFilterClient from './CoursesFilterClient';
-import { Award, ArrowDown } from 'lucide-react';
 import Nav from '@/components/Nav';
 
 // SEO Meta
@@ -70,7 +69,13 @@ const allCourses = [
 const filterOptions = {
   categories: ["AI & Automation", "Data Science", "Cybersecurity", "Software Engineering"],
   levels: ["Beginner", "Intermediate", "Advanced", "Expert"],
-  fundingTags: ["NITTP 政府資助", "CEF 持續進修基金", "RTTP 科技券", "官方認證"],
+  // label = 顯示名稱；keywords = 對應課程 tags 的匹配關鍵字
+  fundingTags: [
+    { label: "NITTP 政府資助", keywords: ["NITTP"] },
+    { label: "CEF 持續進修基金", keywords: ["CEF"] },
+    { label: "RTTP 科技券", keywords: ["RTTP"] },
+    { label: "官方認證", keywords: ["官方認證", "QF 認可", "國際認證"] },
+  ],
   modes: ["實體課", "Zoom 直播", "混合模式"]
 };
 

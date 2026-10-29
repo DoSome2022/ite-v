@@ -1,8 +1,8 @@
 # InnoTrendEDU（宏業教育中心）網站系統架構說明
 
 > 專案：`ite-v2`
-> 路徑：`/Users/user/Documents/Web_project/ITE/ite-v2`
-> 最後整理：2026-10-28
+> 路徑：`/Users/user/Desktop/code/ite_/ite_v2`
+> 最後整理：2026-10-29
 
 本文件說明 `ite-v2` 專案的整體系統架構、網頁架構分佈、設計概念（Design Concept），以及 `components/` 與 `lib/` 目錄內每一個檔案的功能。
 
@@ -23,12 +23,12 @@
 
 | 類別 | 技術 | 版本 |
 |------|------|------|
-| 前端框架 | Next.js（App Router） | 15.5.6 |
+| 前端框架 | Next.js（App Router） | 15.5.28 |
 | UI 函式庫 | React | 19.0.0 |
 | 樣式 | Tailwind CSS | v4.1.18 |
 | 語言 | TypeScript | ^5 |
 | 圖示 | lucide-react | ^0.562.0 |
-| 建置工具 | PostCSS + @tailwindcss/postcss | 8.5.6 / 4.1.18 |
+| 建置工具 | PostCSS + @tailwindcss/postcss | 8.5.32（npm overrides）/ 4.3.3 |
 | Lint | ESLint 9 + eslint-config-next | 16.1.1 |
 
 關鍵特點：
@@ -71,6 +71,9 @@ ite-v2/
 │   ├── layout.tsx               # 根版面（全站共用 <html>/<body>、字型、metadata）
 │   ├── globals.css              # 全域樣式（Tailwind v4 + CSS 變數）
 │   ├── favicon.ico              # 網站圖示
+│   ├── api/                     # API Routes（表單提交示範 stub，未接 SMTP）
+│   │   ├── send-contact/route.ts # 聯絡我們表單
+│   │   └── send-enquiry/route.ts # 企業培訓諮詢表單
 │   ├── (public)/                # 對外公開網站（路由群組，不影響 URL）
 │   │   ├── layout.tsx           # 公開區版面（僅 <main> 包裝）
 │   │   ├── page.tsx             # 首頁
@@ -281,8 +284,8 @@ Tailwind v4 風格的入口樣式：
 - `page.tsx`：Server Component，設定 metadata。
 - `ContactFormSection.tsx`：Client Component，包含左側 Google 地圖 + 右側聯絡表單。
   - 表單欄位：稱呼、電話、電郵、感興趣服務（多選 checkbox）、類型（單選 radio）、詳細內容。
-  - 提交時 `fetch('/api/send-contact')`（**此 API route 目前尚未實作**）。
-  - 提交成功後切換為成功畫面，可「再次填寫」。
+  - 提交時 `fetch('/api/send-contact')`（API route 已建立，為**示範 stub**：僅 console log，未接 SMTP）。
+  - 提交成功後切換為成功畫面，可「再次填寫」；失敗時彈出提示。
 
 ### 9.4 投訴/建議表單 `complaint-form/page.tsx`
 
@@ -307,7 +310,7 @@ Tailwind v4 風格的入口樣式：
   - 工具匹配表格（Copilot / Claude / Hermes / Codex / Gemini / Deepseek）。
   - 基礎課程（全體員工）與進階課程（核心團隊/IT 團隊）卡片。
   - 選擇 ITE 的 4 大理由、FAQ、諮詢 CTA。
-  - Modal 彈窗表單：`fetch('/api/send-enquiry')`（**此 API route 目前尚未實作**），含前端必填驗證。
+  - Modal 彈窗表單：`fetch('/api/send-enquiry')`（API route 已建立，為**示範 stub**：僅 console log，未接 SMTP），含前端必填驗證與失敗提示。
 - `v1.tsx` / `v2.tsx`：企業培訓頁的**舊版備份/實驗版本**（未直接被 `page.tsx` 引用），內容與 `CorporateClient` 高度重疊，保留作為版控參考。
 
 ### 9.7 單一課程詳細頁 `course/page.tsx`
@@ -315,6 +318,7 @@ Tailwind v4 風格的入口樣式：
 - Client Component，AI 課程的詳細示範頁。
 - 內嵌 `courseInfo`（AI 課程基本資料）與 `courseDetail`（詳細描述、學期、適合人群、學習回報、職業出路、亮點）。
 - 含 Breadcrumb、課程資訊卡、預覽影片區、課程內容、時間安排（學期下拉選擇）、右側報名卡片（sticky）、報名彈窗表單。
+- 報名表單已可提交（模擬，1.2 秒延遲後顯示成功畫面）；modal 內的學期選擇與頁面所選同步；「課程模式」欄位跟隨所選學期（`Semester` 含 `mode` 欄位）。
 
 ### 9.8 課程總覽 `courses/`
 
@@ -323,7 +327,7 @@ Tailwind v4 風格的入口樣式：
   - 左側篩選側欄（搜尋關鍵字、專業領域 radio、難度多選、資助多選）。
   - 「臨時篩選 vs 已套用篩選」雙狀態：先選條件，按「篩選」才套用，可「重設」。
   - 右側課程卡片列表（含「重點推薦」標籤、時數/模式/開課日期、查看大綱、下載簡章按鈕）。
-  - 空狀態提示與分頁（目前分頁為靜態）。
+  - 空狀態提示與真實分頁（每頁 3 個，篩選變更自動重置頁碼）。
 
 ### 9.9 課程體系 `courses_v1/`
 
@@ -332,6 +336,7 @@ Tailwind v4 風格的入口樣式：
   - 課程依「核心課程 / 技術技能 / 企業應用」三大分類 + 主題色（藍/紫/綠）。
   - 含關鍵字搜尋、分類篩選、難度篩選，即時過濾。
   - 每門課顯示圖示、適合人群、學習回報、職業出路、難度標籤。
+  - 課程詳情連結：AI 課程指向 `/course`，其餘課程顯示「課程詳情（即將推出）」。
   - 底部有客製化企業培訓卡片。
 
 ### 9.10 學生登入 `login/`
@@ -385,7 +390,7 @@ Tailwind v4 風格的入口樣式：
 
 ### 10.4 `courses/page.tsx` — 課程管理 / 小冊子
 
-- Client Component，新增/編輯/刪除課程。
+- Client Component，新增/編輯/刪除課程（編輯按鈕會載入表單並按原始 ID 更新；重複 ID 會被拒絕）。
 - 欄位：課程 ID、名稱、小冊子內容、學費、留位費（固定 $500）、開班最低人數。
 - 左側表單 + 右側課程列表。
 
@@ -396,11 +401,11 @@ Tailwind v4 風格的入口樣式：
 
 ### 10.6 `students/page.tsx` — 學生帳號管理
 
-- Client Component，新增/編輯/刪除學生帳號（uid、姓名、email、密碼、已報讀課程）。
+- Client Component，新增/編輯/刪除學生帳號（uid、姓名、email、密碼、已報讀課程；編輯按原始 uid 更新並允許改編號，重複編號會被拒絕）。
 
 ### 10.7 `tutor-payroll/page.tsx` — 導師薪金
 
-- Client Component，管理導師薪金記錄（教學時數 × 時薪 = 金額），可標記「已出糧 / 未支付」。
+- Client Component，管理導師薪金記錄（教學時數 × 時薪 = 金額），可標記「已出糧 / 未支付」；出糧日期以香港時區（`Asia/Hong_Kong`）記錄。
 
 ---
 
@@ -449,7 +454,7 @@ Tailwind v4 風格的入口樣式：
 主要包含：
 
 - **Logo**：`Logo.png`、`Logo_White.png`（另有 `Logo_Blue.png` 被舊版 `corporate/v1.tsx` 引用，但該檔實際不存在於 `public/`，需留意）。
-- **講師頭像**：`Teacher_*.png/jpeg/webp`（Aaron Wai、Honcy Lee、Eric、J Tsang、Antoninus、CS Fung、Oscar），以及 `TA_Myra.jpeg`（目前未被引用）。
+- **講師頭像**：`Teacher_*.png/jpeg/webp`（Aaron Wai、Honcy Lee、Eric、J Tsang、Antoninus、CS Fung、Oscar）。
 - **頁面插圖**：`banner.jpg`、`core.jpg`、`corporate_banner.jpg`、`event.png`、`b1.png`、`b2.png`、`b3.png`。
 - **首頁 Banner**：`image/home/banner_1.png`、`image/home/banner_2.png`。
 - **合作夥伴**：`partners/AIA.jpeg`、`BNI.jpeg`、`CT.jpeg`、`HKCYS.jpeg`、`HKJC.jpeg`（目前頁面未直接引用）。
@@ -458,11 +463,24 @@ Tailwind v4 風格的入口樣式：
 
 ## 14. 已知待辦 / 注意事項
 
-1. **API Routes 未實作**：`/api/send-contact`、`/api/send-enquiry`、`/api/student/login` 等在程式碼中被呼叫，但 `app/` 下**沒有對應的 API route 檔案**（沒有 `app/api/` 目錄），表單提交目前會失敗或僅為模擬。
+1. **API Routes 為示範 stub**：`/api/send-contact`、`/api/send-enquiry` 已建立（`app/api/`），目前僅 console log 收到的資料並回傳成功，**未接 SMTP / 電郵服務**；`/api/student/login` 仍未實作（登入目前為前端模擬）。正式上線前必須接入電郵發送，否則真實查詢會流失。
 2. **後台/學生/導師資料皆為前端 mock**：所有資料寫死在各頁面，無資料庫與後端串接。
 3. **`lib/` 目錄為空**：尚無共用工具函式或資料層。
 4. **多套並存的舊版頁面**：`corporate/v1.tsx`、`corporate/v2.tsx`、`courses_v1/`、`newpage/` 為備份或實驗版本，與正式頁面重複，建議後續清理。
-5. **`Logo_Blue.png` 缺失**：`corporate/v1.tsx` 導入 `Logo_Blue.png`，但 `public/` 中不存在此檔（正式版 `CorporateClient.tsx` 已改用 `Logo.png`）。
-6. **`TA_Myra.jpeg` 缺失**：`ourteam/OurTeamClient.tsx` 導入 `TA_Myra.jpeg`，但 `public/` 中不存在此檔（該教師未出現在 `teamMembers` 陣列中，屬未使用的導入）。
-7. **元件命名不一致**：`WaveHeroBg.tsx` 的 default export 名稱是 `WhiteOscilloscopeHeroBg`；`Nav.tsx` 是 `Navbar`；`Footer.tsx` 是 `ITEFooter`；`GoogleMap.tsx` 是 `ITEGoogleMap`，導入時以實際函式名為準。
-8. **`types/index.ts` 未被充分利用**：後台頁面多數自行定義 local type，與 `types/` 的通用型別並存，未來可統一。
+5. **`Logo_Blue.png` 缺失**：`corporate/v1.tsx` 導入 `Logo_Blue.png`，但 `public/` 中不存在此檔（正式版 `CorporateClient.tsx` 已改用 `Logo.png`；v1/v2 為未使用檔案，不影響 build）。
+6. **元件命名不一致**：`WaveHeroBg.tsx` 的 default export 名稱是 `WhiteOscilloscopeHeroBg`；`Nav.tsx` 是 `Navbar`；`Footer.tsx` 是 `ITEFooter`；`GoogleMap.tsx` 是 `ITEGoogleMap`，導入時以實際函式名為準。
+7. **`types/index.ts` 未被充分利用**：後台頁面多數自行定義 local type，與 `types/` 的通用型別並存，未來可統一。
+8. **news 頁面使用原生 `<img>`**：`news/`、`news/post/`、`news/tech-news/` 直接使用 `<img>`（ESLint 17 個 warning），未來可改用 `next/image` 並在 `next.config.ts` 設定 `remotePatterns` 允許 picsum.photos。
+
+---
+
+## 15. 2026-10-29 修復記錄（Bug Fix Changelog）
+
+- **依賴與安全**：Next.js 15.5.6 → 15.5.28（修復 Critical RCE 漏洞）；PostCSS 升至 8.5.32，並以 npm `overrides` 強制 Next 內部的舊版 postcss 同步升級；`npm audit` 現為 0 vulnerabilities。
+- **Build 修復**：移除 `app/layout.tsx` 多餘的 `@ts-expect-error`；修復全部 12 個 ESLint error（`news/tech-news` 缺 key、`privacy-policy` 未轉義引號與 `<a>` 改 `<Link>`、`corporate/layout.tsx` 的 `<Script>` 補 id、兩個 HeroBg 的 `let`→`const`、`StudentLoginClient` 移除 `any` 型別）。
+- **/courses 篩選**：資助標籤改為 `{label, keywords}` 結構，修復「勾選任何資助選項即 0 結果」；分類 radio 可再次點擊取消；分頁改為真實運作（每頁 3 個，篩選後重置頁碼）。
+- **/course 報名**：報名表單補上 `onSubmit`（原本按「提交報名」會原生 GET reload，輸入全失）；modal 學期選擇與頁面同步；`Semester` 增加 `mode` 欄位，「課程模式」跟隨所選學期。
+- **courses_v1**：9 個課程詳情連結原本 8 條 404，現 AI 課程指向 `/course`，其餘顯示「課程詳情（即將推出）」；搜尋關鍵字 trim。
+- **Admin**：學生/課程管理改為「編輯模式追蹤原始 ID」，修復改 ID 後儲存造成重複行 / 覆蓋錯誤記錄；新增重複 ID 拒絕、負數學費 / 最低人數驗證；出糧日期改用香港時區。
+- **表單驗證**：投訴表單電話改為「至少 8 位數字」、描述以 trim 後長度計算、切換聯繫方式清除舊錯誤提示；學生登入改為延遲前同步驗證並 trim 空白。
+- **雜項**：Footer「課程總覽」連結由 `/` 修正為 `/courses`；corporate OG 圖由不存在之 `/corporate.png` 改用 `/corporate_banner.jpg`；三個平台側邊欄加入 active 高亮與 `aria-current`；移除 `TA_Myra.jpeg` 等無效圖片導入與多餘 unused import；`CorporateClient` 補上 `!res.ok` 的失敗提示。

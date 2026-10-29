@@ -25,7 +25,7 @@ export default function ITEFooter() {
             <div>
               <h4 className="font-medium mb-4">Information</h4>
               <div>
-                <Link href="/">
+                <Link href="/courses">
                   <div className="text-left mb-2">
                     <span className="block text-sm font-medium text-slate-500">COURSE</span>
                     <span className="block text-xs text-slate-800">課程總覽</span>

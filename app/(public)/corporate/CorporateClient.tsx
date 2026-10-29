@@ -86,6 +86,8 @@ export default function CorporateClient() {
         setIsSubmitted(true);
         setFormData(initialForm);
         setErrors({});
+      } else {
+        alert('提交失敗，請稍後再試或透過WhatsApp聯絡我們');
       }
     } catch (err) {
       alert('提交失敗，請稍後再試或透過WhatsApp聯絡我們');

@@ -1,7 +1,6 @@
 'use client';
 import { useState } from 'react';
 import Nav from '@/components/Nav';
-import Footer from '@/components/Footer';
 import { Eye, EyeOff } from 'lucide-react';
 
 export default function StudentLoginClient() {
@@ -14,6 +13,13 @@ export default function StudentLoginClient() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
+
+    // 先同步驗證（含空白字元檢查），避免等待延遲期間修改輸入造成結果不一致
+    if (!account.trim() || !password.trim()) {
+      setErrorMsg('請輸入帳號及密碼');
+      return;
+    }
+
     setLoading(true);
 
     // 這裡之後可替換成實際API登入
@@ -25,12 +31,9 @@ export default function StudentLoginClient() {
 
       // 模擬延遲
       await new Promise(r => setTimeout(r, 1200));
-      if (account === '' || password === '') {
-        throw new Error('請輸入帳號及密碼');
-      }
       alert('模擬登入成功，可導向學生儀表板');
-    } catch (err: any) {
-      setErrorMsg(err.message || '登入失敗，請檢查帳號密碼');
+    } catch (err) {
+      setErrorMsg(err instanceof Error ? err.message : '登入失敗，請檢查帳號密碼');
     } finally {
       setLoading(false);
     }

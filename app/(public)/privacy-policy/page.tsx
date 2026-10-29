@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import Nav from '../../../components/Nav'
 import Footer from '../../../components/Footer'
 
@@ -37,7 +38,7 @@ export default function PrivacyPolicyPage() {
           <section>
             <h2 className="text-xl font-semibold text-gray-900 mb-3">1. Introduction</h2>
             <p>
-              Welcome to <strong>Innovation Trend Education Centre</strong> ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy. 
+              Welcome to <strong>Innovation Trend Education Centre</strong> (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;). We are committed to protecting your personal information and your right to privacy.
               This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our service.
             </p>
           </section>
@@ -102,9 +103,9 @@ export default function PrivacyPolicyPage() {
 
         {/* Footer Link */}
         <footer className="mt-12 pt-8 border-t border-gray-100 text-center">
-          <a href="/" className="text-sm font-semibold text-gray-600 hover:text-gray-900">
+          <Link href="/" className="text-sm font-semibold text-gray-600 hover:text-gray-900">
             &larr; Back to Home
-          </a>
+          </Link>
         </footer>
       </div>
     </main>

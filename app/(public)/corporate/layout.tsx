@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     locale: "zh_HK",
     type: "website",
     images: [{
-      url: "/corporate.png",
+      url: "/corporate_banner.jpg",
       width: 1200,
       height: 800,
       alt: "企業AI培訓｜技術轉移落地"
@@ -54,6 +54,7 @@ export default function CorporateLayout({ children }: { children: React.ReactNod
     <>
       {children}
       <Script
+        id="corporate-faq-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />

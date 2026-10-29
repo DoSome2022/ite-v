@@ -1,6 +1,7 @@
 'use client';
 import { ReactNode, useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { ClipboardList, MessageSquare, Clock, LogOut, Menu, X } from 'lucide-react';
 
 type TutorLayoutProps = {
@@ -9,6 +10,7 @@ type TutorLayoutProps = {
 
 export default function TutorLayout({ children }: TutorLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const pathname = usePathname();
 
   const tutorMenu = [
     { label: '課程點名', eng: 'Attendance', href: '/tutor/attendance', icon: <ClipboardList size={20} /> },
@@ -61,7 +63,12 @@ export default function TutorLayout({ children }: TutorLayoutProps) {
                   key={item.href}
                   href={item.href}
                   onClick={() => setSidebarOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-blue-50 text-gray-700 hover:text-slate-500"
+                  aria-current={pathname === item.href ? 'page' : undefined}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-blue-50 ${
+                    pathname === item.href
+                      ? 'bg-blue-50 text-blue-700 font-medium'
+                      : 'text-gray-700 hover:text-slate-500'
+                  }`}
                 >
                   {item.icon}
                   <div>

@@ -198,9 +198,10 @@ export default function CoursesPage() {
   const filteredCategories = courseCategories.map(category => {
     // 過濾該分類下的課程
     const filteredCourses = category.courses.filter(course => {
-      // 關鍵字過濾
-      const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           course.shortDesc.toLowerCase().includes(searchTerm.toLowerCase());
+      // 關鍵字過濾（先 trim 避免前後空白影響匹配）
+      const term = searchTerm.trim().toLowerCase();
+      const matchesSearch = course.title.toLowerCase().includes(term) ||
+                           course.shortDesc.toLowerCase().includes(term);
       
       // 分類過濾
       const matchesCategory = selectedCategory === 'all' || category.id === selectedCategory;
@@ -371,13 +372,19 @@ export default function CoursesPage() {
 
                         {/* 操作按鈕區 */}
                         <div className="mt-6 flex items-center justify-end gap-3">
-                          <a
-                            href={`/${course.id}`}
-                            className={`inline-flex items-center text-sm font-medium ${styles.text} ${styles.hover} px-3 py-1.5 rounded-lg`}
-                          >
-                            課程詳情
-                            <ArrowRight className="ml-1 h-3 w-3" />
-                          </a>
+                          {course.id === 'ai' ? (
+                            <a
+                              href="/course"
+                              className={`inline-flex items-center text-sm font-medium ${styles.text} ${styles.hover} px-3 py-1.5 rounded-lg`}
+                            >
+                              課程詳情
+                              <ArrowRight className="ml-1 h-3 w-3" />
+                            </a>
+                          ) : (
+                            <span className="inline-flex items-center text-sm font-medium text-gray-400 px-3 py-1.5 cursor-not-allowed">
+                              課程詳情（即將推出）
+                            </span>
+                          )}
                           <button className="inline-flex items-center text-sm font-medium bg-gray-800 text-white px-4 py-1.5 rounded-lg hover:bg-gray-700 transition-colors">
                             諮詢課程
                           </button>

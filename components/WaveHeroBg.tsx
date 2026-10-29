@@ -11,7 +11,6 @@ export default function WhiteOscilloscopeHeroBg() {
     if (!ctx) return;
 
     let animationId: number;
-    let resizeObserver: ResizeObserver;
     let lastTimestamp = 0;
     const TARGET_FPS = 30;
     const FPS_INTERVAL = 1000 / TARGET_FPS;
@@ -215,7 +214,7 @@ export default function WhiteOscilloscopeHeroBg() {
     }, { threshold: 0 });
     io.observe(canvas);
 
-    resizeObserver = new ResizeObserver(() => setSize());
+    const resizeObserver = new ResizeObserver(() => setSize());
     resizeObserver.observe(canvas);
 
     return () => {

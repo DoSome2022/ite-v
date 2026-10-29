@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Users, Award, ChevronRight, CheckCircle, ArrowRight } from 'lucide-react';
+import { BookOpen, Award, ChevronRight, CheckCircle, ArrowRight } from 'lucide-react';
 
 // 模擬數據：將原本的「商品」包裝成「學程」
 const featuredPrograms = [

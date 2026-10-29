@@ -56,6 +56,10 @@ export default function ComplaintFormPage() {
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
+    // 切換聯繫方式時，同時清除該欄位的舊錯誤提示（錯誤存於 contact，而 radio 的 name 是 contactType）
+    if (name === 'contactType') {
+      setErrors(prev => ({ ...prev, contact: '' }));
+    }
   };
 
   // 處理文件上傳
@@ -92,8 +96,8 @@ export default function ComplaintFormPage() {
     
     if (!formData.contact.trim()) {
       newErrors.contact = `請填寫您的${formData.contactType === 'phone' ? '聯繫電話' : '電子郵箱'}`;
-    } else if (formData.contactType === 'phone' && !/^[\d\-\+\(\) ]{8,20}$/.test(formData.contact)) {
-      newErrors.contact = '請填寫有效的聯繫電話';
+    } else if (formData.contactType === 'phone' && formData.contact.replace(/\D/g, '').length < 8) {
+      newErrors.contact = '請填寫有效的聯繫電話（至少8位數字）';
     } else if (formData.contactType === 'email' && !/\S+@\S+\.\S+/.test(formData.contact)) {
       newErrors.contact = '請填寫有效的電子郵箱';
     }
@@ -108,7 +112,7 @@ export default function ComplaintFormPage() {
     
     if (!formData.description.trim()) {
       newErrors.description = '請詳細描述投訴內容';
-    } else if (formData.description.length < 20) {
+    } else if (formData.description.trim().length < 20) {
       newErrors.description = '投訴內容請至少填寫20個字符';
     }
     

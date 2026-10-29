@@ -1,6 +1,7 @@
 'use client';
 import { ReactNode, useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { ListChecks, BookOpen, Users, Calendar, FileText, LogOut, Menu, X, DollarSign } from 'lucide-react';
 
 type AdminLayoutProps = {
@@ -9,6 +10,7 @@ type AdminLayoutProps = {
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const pathname = usePathname();
 
   const adminMenu = [
     { label: '報名列表', eng: 'Application List', href: '/admin/applications', icon: <ListChecks size={20} /> },
@@ -67,7 +69,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   key={item.href}
                   href={item.href}
                   onClick={() => setSidebarOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-blue-50 text-gray-700 hover:text-slate-500"
+                  aria-current={pathname === item.href ? 'page' : undefined}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-blue-50 ${
+                    pathname === item.href
+                      ? 'bg-blue-50 text-blue-700 font-medium'
+                      : 'text-gray-700 hover:text-slate-500'
+                  }`}
                 >
                   {item.icon}
                   <div>
